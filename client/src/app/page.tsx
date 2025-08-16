@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState, useRef } from 'react';
-import Image from "next/image"; // Importando o componente Image do Next.js
+import Image from "next/image"; 
 import './prometheus.scss';
 
 export default function Home() {
@@ -9,7 +9,6 @@ export default function Home() {
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Efeito para rolar para baixo quando novas mensagens chegarem
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
@@ -18,13 +17,11 @@ export default function Home() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(() => {
-    // Conecta-se ao WebSocket ao carregar a página
+  useEffect(() => { //ta hardcode, dps mudar 
     const socketConnection = new WebSocket('wss://prometheus-chat-server-production.up.railway.app');
     
     socketConnection.onopen = () => {
       console.log('Conexão WebSocket aberta!');
-      // Mensagem de boas-vindas
       setMessages(prev => [...prev, {text: "Olá! Sou o Prometheus. Como posso te ajudar hoje?", isUser: false}]);
     };
 
@@ -43,7 +40,6 @@ export default function Home() {
 
     setSocket(socketConnection);
 
-    // Cleanup ao desmontar o componente
     return () => {
       if (socketConnection) {
         socketConnection.close();
@@ -72,7 +68,6 @@ export default function Home() {
       <header className="chat-header">
         <div className="header-content">
           <div className="logo">
-            {/* Substituindo o "P" por uma imagem de Prometheus */}
             <Image src="/negon.png" alt="Prometheus logo" width={50} height={50} style={{ borderRadius: '50%' }}  />
             <h1>_Prometheus</h1>
           </div>
@@ -80,9 +75,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Chat Box */}
       <div className="chat-container">
-        {/* Messages Area */}
         <div className="messages-area">
           {messages.map((msg, index) => (
             <div key={index} className={`message ${msg.isUser ? 'user-message' : 'bot-message'}`}>
@@ -97,7 +90,6 @@ export default function Home() {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Message Input */}
         <div className="input-area">
           <div className="input-container">
             <input
