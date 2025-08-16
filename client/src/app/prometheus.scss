@@ -1,17 +1,15 @@
-// prometheus.scss
-
 // Cores
-$primary-color: #6d28d9;
-$primary-light: #8b5cf6;
-$primary-dark: #4c1d95;
-$background-dark: #0f172a;
-$background-light: #1e293b;
-$text-primary: #f8fafc;
-$text-secondary: #94a3b8;
-$user-message: #4f46e5;
-$bot-message: #334155;
-$input-bg: #1e293b;
-$input-border: #475569;
+$primary-color: #F2D04D; // Ouro Claro
+$primary-light: #4F8EF7; // Azul Claro
+$primary-dark: #333333;  // Cinza Escuro
+$background-dark: #1A1A1A; // Fundo Escuro
+$background-light: #2C2C2C; // Fundo Claro
+$text-primary: #F8FAFC; // Texto Claro
+$text-secondary: #B0B0B0; // Texto Secundário
+$user-message: #4F8EF7; // Azul Claro para mensagens do usuário
+$bot-message: #333333;  // Cinza Escuro para mensagens do bot
+$input-bg: #2C2C2C; // Fundo do Input
+$input-border: #474747; // Borda do Input
 
 // Estilos base
 .prometheus-chat {
@@ -56,6 +54,7 @@ $input-border: #475569;
         font-size: 1.5rem;
         font-weight: 600;
         margin: 0;
+        color: $primary-color;
       }
     }
     
@@ -124,7 +123,7 @@ $input-border: #475569;
 }
 
 .user-message {
-  background-color: $user-message;
+  background-color: $primary-light;
   color: white;
   margin-left: auto;
   border-bottom-right-radius: 0.25rem;
@@ -172,7 +171,7 @@ $input-border: #475569;
   }
   
   .send-button {
-    background: linear-gradient(135deg, $primary-light, $primary-dark);
+    background-color: $primary-color;
     border: none;
     border-radius: 50%;
     width: 40px;
@@ -190,7 +189,6 @@ $input-border: #475569;
     &:disabled {
       opacity: 0.5;
       cursor: not-allowed;
-      transform: none;
     }
     
     svg {
@@ -219,7 +217,7 @@ $input-border: #475569;
     padding: 0.75rem;
     
     .logo h1 {
-      font-size: 1.25rem;
+      font-size: 1.5rem;
     }
   }
   

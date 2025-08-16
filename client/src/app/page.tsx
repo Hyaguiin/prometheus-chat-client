@@ -4,7 +4,7 @@ import Image from "next/image";
 import './prometheus.scss';
 
 export default function Home() {
-  const [messages, setMessages] = useState<{text: string, isUser: boolean}[]>([]);
+  const [messages, setMessages] = useState<{ text: string, isUser: boolean }[]>([]);
   const [message, setMessage] = useState<string>('');
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -17,17 +17,17 @@ export default function Home() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(() => { //ta hardcode, dps mudar 
+  useEffect(() => {
     const socketConnection = new WebSocket('wss://prometheus-chat-server-production.up.railway.app');
     
     socketConnection.onopen = () => {
       console.log('Conexão WebSocket aberta!');
-      setMessages(prev => [...prev, {text: "Olá! Sou o Prometheus. Como posso te ajudar hoje?", isUser: false}]);
+      setMessages(prev => [...prev, { text: "Olá! Sou o Prometheus. Como posso te ajudar hoje?", isUser: false }]);
     };
 
     socketConnection.onmessage = (event) => {
       console.log('Mensagem recebida:', event.data);
-      setMessages(prev => [...prev, {text: event.data, isUser: false}]);
+      setMessages(prev => [...prev, { text: event.data, isUser: false }]);
     };
 
     socketConnection.onerror = (error) => {
@@ -50,7 +50,7 @@ export default function Home() {
   const sendMessage = () => {
     if (socket && message.trim()) {
       socket.send(message);
-      setMessages(prev => [...prev, {text: message, isUser: true}]);
+      setMessages(prev => [...prev, { text: message, isUser: true }]);
       setMessage('');
     }
   };
@@ -68,10 +68,10 @@ export default function Home() {
       <header className="chat-header">
         <div className="header-content">
           <div className="logo">
-            <Image src="/negon.png" alt="Prometheus logo" width={50} height={50} style={{ borderRadius: '50%' }}  />
+            <Image src="/negon.png" alt="Prometheus logo" width={50} height={50} style={{ borderRadius: '50%' }} />
             <h1>_Prometheus</h1>
           </div>
-          <p className="subtitle">Converse com Doidao das bolacha que ama calistenicos</p>
+          <p className="subtitle">Converse com o Assistente Financeiro</p>
         </div>
       </header>
 
@@ -79,12 +79,8 @@ export default function Home() {
         <div className="messages-area">
           {messages.map((msg, index) => (
             <div key={index} className={`message ${msg.isUser ? 'user-message' : 'bot-message'}`}>
-              <div className="message-content">
-                {msg.text}
-              </div>
-              <div className="message-time">
-                {new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-              </div>
+              <div className="message-content">{msg.text}</div>
+              <div className="message-time">{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
             </div>
           ))}
           <div ref={messagesEndRef} />
@@ -100,13 +96,9 @@ export default function Home() {
               placeholder="Digite sua mensagem..."
               className="message-input"
             />
-            <button
-              onClick={sendMessage}
-              disabled={!message.trim()}
-              className="send-button"
-            >
+            <button onClick={sendMessage} disabled={!message.trim()} className="send-button">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
               </svg>
             </button>
           </div>
