@@ -1,6 +1,6 @@
-'use client';
+'use client'
 import { useEffect, useState, useRef } from 'react';
-import Image from "next/image";
+import Image from "next/image"; // Importando o componente Image do Next.js
 import './prometheus.scss';
 
 export default function Home() {
@@ -72,10 +72,11 @@ export default function Home() {
       <header className="chat-header">
         <div className="header-content">
           <div className="logo">
-            <div className="logo-icon">P</div>
-            <h1>Prometheus</h1>
+            {/* Substituindo o "P" por uma imagem de Prometheus */}
+            <Image src="/negon.png" alt="Prometheus logo" width={50} height={50} style={{ borderRadius: '50%' }}  />
+            <h1>_Prometheus</h1>
           </div>
-          <p className="subtitle">Converse com inteligência artificial</p>
+          <p className="subtitle">Converse com Doidao das bolacha que ama calistenicos</p>
         </div>
       </header>
 
