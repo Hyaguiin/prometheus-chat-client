@@ -4,18 +4,26 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { FiMail, FiLock, FiUser } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
+import { useRouter } from "next/navigation"; // <- importar aqui
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const router = useRouter(); // <- inicializar aqui
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Aqui poderia ter lógica de autenticação real com API
     console.log("Login:", { email, senha });
+
+    // Redirecionar para /chat
+    router.push("/chat");
   };
 
   const handleGoogleLogin = () => {
     console.log("Login com Google acionado");
+    router.push("/chat"); // se quiser redirecionar por aqui também
   };
 
   return (
