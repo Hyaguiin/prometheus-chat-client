@@ -1,11 +1,29 @@
-export const handleApiError = (error: any) => {
-  console.error('Erro na requisição:', {
-    status: error.response?.status,
-    message: error.response?.data?.message || error.message,
-    url: error.config?.url,
-    method: error.config?.method,
-    data: error.config?.data
-  });
-  
-  throw new Error(error.response?.data?.message || 'Erro na operação');
+export const handleApiError = (error: unknown) => {
+  if (typeof error === 'object' && error !== null && 'response' in error) {
+    const err = error as {
+      response?: {
+        status?: number;
+        data?: { message?: string };
+      };
+      message?: string;
+      config?: {
+        url?: string;
+        method?: string;
+        data?: any;
+      };
+    };
+
+    console.error('Erro na requisição:', {
+      status: err.response?.status,
+      message: err.response?.data?.message || err.message,
+      url: err.config?.url,
+      method: err.config?.method,
+      data: err.config?.data
+    });
+
+    throw new Error(err.response?.data?.message || 'Erro na operação');
+  }
+
+  console.error('Erro desconhecido:', error);
+  throw new Error('Erro desconhecido');
 };
