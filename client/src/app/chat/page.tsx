@@ -18,7 +18,7 @@ export default function Chat() {
   };
 
   useEffect(() => {
-    const socketConnection = new WebSocket('ws://localhost:3000');
+    const socketConnection = new WebSocket('wss://prometheus-chat-server-production.up.railway.app');
 
     socketConnection.onopen = () => {
       console.log('Conexão WebSocket aberta!');
