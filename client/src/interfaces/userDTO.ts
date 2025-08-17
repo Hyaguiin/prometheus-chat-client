@@ -25,4 +25,6 @@ export interface AuthResponse {
   user: User;
 }
 
-export interface UserCreationAtr extends User {}
+export interface UserCreationAtr extends User {
+   confirmPassword?: string;
+}
