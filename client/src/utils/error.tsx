@@ -1,5 +1,9 @@
 export const handleApiError = (error: unknown) => {
-  if (typeof error === 'object' && error !== null && 'response' in error) {
+  if (
+    typeof error === 'object' &&
+    error !== null &&
+    'message' in error
+  ) {
     const err = error as {
       response?: {
         status?: number;
