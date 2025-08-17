@@ -73,7 +73,7 @@ const Register: React.FC = () => {
 
           <button
             type="submit"
-            className="w-full py-3 rounded-lg bg-gradient-to-r from-[#2C2C2C]/80 via-[#1A1A1A]/80 to-[#F2D04D]/70 font-semibold tracking-wide transition-all duration-300 hover:shadow-[0_0_20px_#F2D04D] hover:scale-105"
+         className="w-full py-3 rounded-lg bg-[#0008] font-semibold tracking-wide transition-all duration-300 hover:shadow-[0_0_20px_#F2D04D] hover:scale-105"
           >
             REGISTRAR
           </button>
@@ -82,7 +82,7 @@ const Register: React.FC = () => {
             type="button"
             onClick={handleGoogleRegister}
             aria-label="Registrar com Google"
-            className="w-full flex items-center justify-center gap-3 py-3 rounded-lg bg-gradient-to-r from-[#2C2C2C]/80 via-[#1A1A1A]/80 to-[#F2D04D]/70 font-semibold tracking-wide transition-all duration-300 hover:shadow-[0_0_5px_#F2D04D] hover:scale-105 mt-4"
+            className="w-full flex items-center justify-center gap-3 py-3 rounded-lg bg-gradient-to-r from-[#2C2C2C]/80 via-[#1A1A1A]/80  font-semibold tracking-wide transition-all duration-300 hover:shadow-[0_0_5px_#F2D04D] hover:scale-105 mt-4"
           >
             <FcGoogle size={24} />
             Registrar com Google
