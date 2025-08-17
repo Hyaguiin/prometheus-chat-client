@@ -13,7 +13,7 @@ export const handleApiError = (error: unknown) => {
       config?: {
         url?: string;
         method?: string;
-        data?: any;
+        data?: unknown;
       };
     };
 
