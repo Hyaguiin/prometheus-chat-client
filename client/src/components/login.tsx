@@ -4,26 +4,59 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { FiMail, FiLock, FiUser } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
-import { useRouter } from "next/navigation"; // <- importar aqui
+import { useRouter } from "next/navigation";
+import { handleApiError } from "@/utils/error";
+
+import { AuthService } from "@/services/authService";
+import { LoginCredentials } from "@/interfaces/userDTO";
+
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const router = useRouter(); // <- inicializar aqui
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
-    // Aqui poderia ter lógica de autenticação real com API
-    console.log("Login:", { email, senha });
+    const credentials: LoginCredentials = {
+      email,
+      password: senha,
+    };
 
-    // Redirecionar para /chat
-    router.push("/chat");
+    try {
+      const response = await AuthService.login(credentials);
+
+      localStorage.setItem("token", `Bearer ${response.token}`);
+
+      toast.success("Login realizado com sucesso! 🎉");
+
+      router.push("/chat");
+    } catch (error: unknown) {
+      try {
+        handleApiError(error);
+      } catch (err) {
+        if (err instanceof Error) {
+          toast.error(err.message);
+          console.error("Erro ao fazer login:", err.message);
+        } else {
+          toast.error("Erro desconhecido.");
+          console.error("Erro desconhecido ao fazer login:", err);
+        }
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleGoogleLogin = () => {
     console.log("Login com Google acionado");
-    router.push("/chat"); // se quiser redirecionar por aqui também
+    toast.info("Login com Google ainda não implementado.");
+    router.push("/chat");
   };
 
   return (
@@ -78,18 +111,17 @@ const Login: React.FC = () => {
 
           <button
             type="submit"
-      className="w-full py-3 rounded-lg bg-[#0008] font-semibold tracking-wide transition-all duration-300 hover:shadow-[0_0_20px_#F2D04D] hover:scale-105"
-
-
+            disabled={loading}
+            className="w-full py-3 rounded-lg bg-[#0008] font-semibold tracking-wide transition-all duration-300 hover:shadow-[0_0_20px_#F2D04D] hover:scale-105 disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            ENTRAR
+            {loading ? "Entrando..." : "ENTRAR"}
           </button>
 
           <button
             type="button"
             onClick={handleGoogleLogin}
             aria-label="Entrar com Google"
-            className="w-full flex items-center justify-center gap-3 py-3 rounded-lg bg-gradient-to-r from-[#2C2C2C]/80 via-[#1A1A1A]/80  font-semibold tracking-wide transition-all duration-300 hover:shadow-[0_0_5px_#F2D04D] hover:scale-105 mt-4"
+            className="w-full flex items-center justify-center gap-3 py-3 rounded-lg bg-gradient-to-r from-[#2C2C2C]/80 via-[#1A1A1A]/80 font-semibold tracking-wide transition-all duration-300 hover:shadow-[0_0_5px_#F2D04D] hover:scale-105 mt-4"
           >
             <FcGoogle size={24} />
             Entrar com Google
@@ -97,7 +129,10 @@ const Login: React.FC = () => {
 
           <p className="text-sm text-gray-300 text-center mt-4">
             Não tem uma conta?{" "}
-            <Link href="/register" className="text-[#F2D04D] hover:text-white font-semibold transition">
+            <Link
+              href="/register"
+              className="text-[#F2D04D] hover:text-white font-semibold transition"
+            >
               Registre-se
             </Link>
           </p>

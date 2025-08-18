@@ -2,10 +2,10 @@ export interface User {
   id: string;
   name: string;
   secondname: string;
-  birthdate: Date;
+  birthdate: string;
   email: string;
   password: string;
-  cep: number;
+  cep: string;
 }
 
 export interface LoginCredentials {
@@ -16,8 +16,8 @@ export interface LoginCredentials {
 export interface registerCredentials extends LoginCredentials {
   name: string;
   secondname: string;
-  birthdate: Date;
-  cep: number;
+  birthdate: string;
+  cep: string;
 }
 
 export interface AuthResponse {

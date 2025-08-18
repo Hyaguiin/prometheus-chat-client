@@ -17,6 +17,7 @@ export default function Chat() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  //Hard code, depois remover
   useEffect(() => {
     const socketConnection = new WebSocket('wss://prometheus-chat-server-production.up.railway.app');
 
@@ -47,7 +48,6 @@ export default function Chat() {
     };
   }, []);
 
-  // 🔁 Função para construir o contexto (últimas 10 mensagens)
   const buildContext = () => {
     return messages
       .slice(-10) // Últimas 10 mensagens
@@ -66,7 +66,6 @@ export default function Chat() {
 
       socket.send(payload);
 
-      // 💬 Adiciona mensagem do usuário ao estado local
       setMessages(prev => [...prev, { text: message, isUser: true }]);
       setMessage('');
     }

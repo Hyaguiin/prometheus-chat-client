@@ -1,9 +1,6 @@
-export const handleApiError = (error: unknown) => {
-  if (
-    typeof error === 'object' &&
-    error !== null &&
-    'message' in error
-  ) {
+export const handleApiError = (error: unknown): never => {
+  if (typeof error === "object" && error !== null) {
+    // Tenta inferir erro do axios ou fetch
     const err = error as {
       response?: {
         status?: number;
@@ -17,17 +14,26 @@ export const handleApiError = (error: unknown) => {
       };
     };
 
-    console.error('Erro na requisição:', {
-      status: err.response?.status,
-      message: err.response?.data?.message || err.message,
+    const status = err.response?.status;
+    const dataMessage = err.response?.data?.message;
+    const message = dataMessage || err.message || "Erro na operação";
+
+    console.error("Erro na requisição:", {
+      status,
+      message,
       url: err.config?.url,
       method: err.config?.method,
-      data: err.config?.data
+      data: err.config?.data,
+      fullError: err,
     });
 
-    throw new Error(err.response?.data?.message || 'Erro na operação');
+    throw new Error(message);
   }
 
-  console.error('Erro desconhecido:', error);
-  throw new Error('Erro desconhecido');
+  console.error("Erro desconhecido:", error);
+  throw new Error(
+    typeof error === "string"
+      ? error
+      : "Erro desconhecido"
+  );
 };
