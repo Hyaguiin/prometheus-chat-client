@@ -2,12 +2,14 @@
 import { useEffect, useState, useRef } from 'react';
 import Image from "next/image";
 import './prometheus.scss';
+import { webHookUrl } from '@/utils/url_env';
 
 export default function Chat() {
   const [messages, setMessages] = useState<{ text: string, isUser: boolean }[]>([]);
   const [message, setMessage] = useState<string>('');
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
 
   useEffect(() => {
     scrollToBottom();
@@ -17,8 +19,9 @@ export default function Chat() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  //Hard code, depois remover
   useEffect(() => {
-    const socketConnection = new WebSocket('wss://prometheus-chat-server-production.up.railway.app');
+    const socketConnection = new WebSocket(`${webHookUrl}`);
 
     socketConnection.onopen = () => {
       console.log('Conexão WebSocket aberta!');
@@ -47,7 +50,6 @@ export default function Chat() {
     };
   }, []);
 
-  // 🔁 Função para construir o contexto (últimas 10 mensagens)
   const buildContext = () => {
     return messages
       .slice(-10) // Últimas 10 mensagens
@@ -66,7 +68,6 @@ export default function Chat() {
 
       socket.send(payload);
 
-      // 💬 Adiciona mensagem do usuário ao estado local
       setMessages(prev => [...prev, { text: message, isUser: true }]);
       setMessage('');
     }

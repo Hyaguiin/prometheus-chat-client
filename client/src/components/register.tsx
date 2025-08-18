@@ -2,20 +2,69 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { FiMail, FiLock, FiUser } from "react-icons/fi";
+import { FiMail, FiLock, FiUser, FiMapPin, FiCalendar } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+
+import { handleApiError } from "@/utils/error";
+import { AuthService } from "@/services/authService";
+import { registerCredentials } from "@/interfaces/userDTO";
 
 const Register: React.FC = () => {
-  const [nome, setNome] = useState("");
+  const [name, setName] = useState("");
+  const [secondname, setSecondname] = useState("");
   const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+  const [password, setPassword] = useState("");
+  const [cep, setCep] = useState("");
+  const [birthdate, setBirthdate] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Registro:", { nome, email, senha });
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setLoading(true);
+  setError("");
+
+
+  const body: registerCredentials = {
+    name,
+    secondname,
+    email,
+    password,
+    cep,
+    birthdate,
   };
 
+  try {
+    const response = await AuthService.register(body);
+
+
+    toast.success("Registro realizado com sucesso! 🎉");
+    router.push("/login");
+  } catch (error: unknown) {
+    try {
+      handleApiError(error);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+        toast.error(err.message);
+        console.error("Erro ao registrar:", err.message);
+      } else {
+        setError("Erro desconhecido ao registrar.");
+        toast.error("Erro desconhecido ao registrar.");
+        console.error("Erro desconhecido ao registrar:", err);
+      }
+    }
+  } finally {
+    setLoading(false);
+  }
+};
+
+
   const handleGoogleRegister = () => {
+    toast.info("Registro com Google ainda não implementado.");
     console.log("Registro com Google acionado");
   };
 
@@ -40,8 +89,20 @@ const Register: React.FC = () => {
             <input
               type="text"
               placeholder="Nome"
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              className="w-full pl-10 pr-4 py-3 rounded-lg bg-transparent border-b border-gray-400/50 focus:outline-none focus:border-[#F2D04D] placeholder-gray-400 text-white"
+            />
+          </div>
+
+          <div className="relative">
+            <FiUser className="absolute left-3 top-3 text-black" />
+            <input
+              type="text"
+              placeholder="Sobrenome"
+              value={secondname}
+              onChange={(e) => setSecondname(e.target.value)}
               required
               className="w-full pl-10 pr-4 py-3 rounded-lg bg-transparent border-b border-gray-400/50 focus:outline-none focus:border-[#F2D04D] placeholder-gray-400 text-white"
             />
@@ -64,18 +125,47 @@ const Register: React.FC = () => {
             <input
               type="password"
               placeholder="Senha"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
               className="w-full pl-10 pr-4 py-3 rounded-lg bg-transparent border-b border-gray-400/50 focus:outline-none focus:border-[#F2D04D] placeholder-gray-400 text-white"
             />
           </div>
 
+          <div className="relative">
+            <FiMapPin className="absolute left-3 top-3 text-black" />
+            <input
+              type="text"
+              placeholder="CEP"
+              value={cep}
+              onChange={(e) => setCep(e.target.value)}
+              required
+              pattern="\d{5}-?\d{3}"
+              className="w-full pl-10 pr-4 py-3 rounded-lg bg-transparent border-b border-gray-400/50 focus:outline-none focus:border-[#F2D04D] placeholder-gray-400 text-white"
+            />
+          </div>
+
+          <div className="relative">
+            <FiCalendar className="absolute left-3 top-3 text-black" />
+            <input
+              type="date"
+              value={birthdate}
+              onChange={(e) => setBirthdate(e.target.value)}
+              required
+              className="w-full pl-10 pr-4 py-3 rounded-lg bg-transparent border-b border-gray-400/50 focus:outline-none focus:border-[#F2D04D] placeholder-gray-400 text-white"
+            />
+          </div>
+
+          {error && (
+            <p className="text-red-400 text-sm text-center">{error}</p>
+          )}
+
           <button
             type="submit"
-         className="w-full py-3 rounded-lg bg-[#0008] font-semibold tracking-wide transition-all duration-300 hover:shadow-[0_0_20px_#F2D04D] hover:scale-105"
+            disabled={loading}
+            className="w-full py-3 rounded-lg bg-[#0008] font-semibold tracking-wide transition-all duration-300 hover:shadow-[0_0_20px_#F2D04D] hover:scale-105 disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            REGISTRAR
+            {loading ? "Registrando..." : "REGISTRAR"}
           </button>
 
           <button
@@ -90,7 +180,10 @@ const Register: React.FC = () => {
 
           <p className="text-sm text-gray-300 text-center mt-4">
             Já tem uma conta?{" "}
-            <Link href="/login" className="text-[#F2D04D] hover:text-white font-semibold transition">
+            <Link
+              href="/login"
+              className="text-[#F2D04D] hover:text-white font-semibold transition"
+            >
               Entrar
             </Link>
           </p>
